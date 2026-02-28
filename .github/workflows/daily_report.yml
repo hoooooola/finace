@@ -39,3 +39,23 @@ jobs:
         FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
       run: |
         python main.py
+
+    - name: Upload Pages Artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        # 將剛剛主程式產生 JSON 與 HTML 所在的 public 資料夾準備打包
+        path: ./investment_assistant/public
+
+  deploy-pages:
+    needs: run-daily-report
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write      # pages deploy 必須權限
+      id-token: write   # actions/deploy-pages 必須權限
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

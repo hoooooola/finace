@@ -6,6 +6,7 @@ import google.generativeai as genai
 
 from data_fetchers.tw_stock_fetcher import get_stock_basic_info
 from data_fetchers.macro_economy import get_fred_data
+from data_fetchers.export_to_json import export_data_to_json
 
 # 載入環境變數
 load_dotenv()
@@ -107,8 +108,12 @@ def main():
             ai_text = response.text
             print(f"🤖 理財幕僚分析：\n{ai_text}")
             
+            # 將生數據與 AI 分析匯出為給網頁用的 data.json
+            export_data_to_json(ai_text)
+            
             # 推播訊息至 Telegram
-            final_message = f"📊 *今日投資早報*\n\n{market_data_summary}\n🤖 *理財幕僚分析*\n{ai_text}"
+            dashboard_url = "https://hoooooola.github.io/finace"
+            final_message = f"📊 *今日投資早報*\n\n{market_data_summary}\n🤖 *理財幕僚分析*\n{ai_text}\n\n👉 [點此開啟您的專屬視覺化圖表儀表板]({dashboard_url})"
             send_telegram_message(final_message)
             
         except Exception as e:

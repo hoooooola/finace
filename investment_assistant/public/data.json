@@ -1,0 +1,64 @@
+{
+  "update_time": "2026-02-28 11:53:00",
+  "ai_analysis": "這是一段測試用的 AI 分析文案...",
+  "market_data": {
+    "etfs": [
+      {
+        "symbol": "SMH",
+        "price": 406.37
+      },
+      {
+        "symbol": "SHLD",
+        "price": 74.86
+      },
+      {
+        "symbol": "VPU",
+        "price": 205.87
+      },
+      {
+        "symbol": "BOTZ",
+        "price": 39.02
+      }
+    ],
+    "tw_stocks": [
+      {
+        "symbol": "2330",
+        "price": 1995.0,
+        "eps": 66.23,
+        "pe": 30.1223,
+        "yield": "1.2%",
+        "name": "Taiwan Semiconductor Manufacturing Company Limited"
+      },
+      {
+        "symbol": "00892",
+        "price": 28.71,
+        "eps": "N/A",
+        "pe": 35.773094,
+        "yield": "1.85%",
+        "name": "Fubon Taiwan Core Semi ETF"
+      },
+      {
+        "symbol": "00881",
+        "price": 38.31,
+        "eps": "N/A",
+        "pe": 28.164032,
+        "yield": "9.4%",
+        "name": "Cathay Taiwan Technology Leader ETF"
+      }
+    ],
+    "macro_economy": [
+      {
+        "series_id": "UNRATE",
+        "date": "2026-01-01",
+        "value": "4.3%",
+        "name": "美國失業率"
+      },
+      {
+        "series_id": "FEDFUNDS",
+        "date": "2026-01-01",
+        "value": "3.64%",
+        "name": "聯邦基準利率"
+      }
+    ]
+  }
+}

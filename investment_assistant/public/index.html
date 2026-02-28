@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人理財幕僚儀表板</title>
+    <!-- 引入 Bootstrap 5 做切版與原生暗黑模式 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入 Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; }
+        .card { background-color: #1e1e1e; border: 1px solid #333; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .card-header { border-bottom: 1px solid #333; font-weight: bold; color: #a1c4fd; }
+        h1 { color: #f8f9fa; font-weight: 700; margin-bottom: 0; }
+        .text-muted { color: #888 !important; }
+        .ai-analysis-box { background: linear-gradient(145deg, #1f2937, #111827); border-left: 4px solid #6366f1; padding: 20px; border-radius: 8px; }
+        .ai-text { font-size: 1.1rem; line-height: 1.6; color: #e5e7eb; white-space: pre-wrap; }
+        .chart-container { position: relative; height: 300px; width: 100%; }
+        /* 避免圖表因 RWD 變形 */
+        canvas { max-width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <!-- 頂部標題與更新時間 -->
+        <div class="d-flex justify-content-between align-items-end mb-4 border-bottom border-dark pb-3">
+            <div>
+                <h1>📊 Investment Dashboard</h1>
+                <p class="text-muted mb-0">專屬理財幕僚觀點與數據大廳</p>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-secondary p-2" id="updateTime">載入中...</span>
+            </div>
+        </div>
+
+        <!-- AI 分析區塊 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="ai-analysis-box shadow-sm">
+                    <h5 class="text-indigo mb-3" style="color: #818cf8;">🤖 今日理財幕僚洞察</h5>
+                    <div id="aiAnalysisText" class="ai-text">分析載入中...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 圖表區塊 -->
+        <div class="row">
+            <!-- 左側：美股 ETF -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        🇺🇸 美股重點 ETF 觀察 (股價)
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="etfChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右側：台股基本面 P/E -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        🇹🇼 台股焦點大廠與 ETF (本益比 P/E)
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="twStockChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部區塊：總體經濟 -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <span>🏛️ 美國聯準會總經風向標</span>
+                        <small class="text-warning">防禦型警戒指標</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center" id="macroCards">
+                            <!-- JS 動態生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="text-center text-muted mt-5 pb-3">
+            <small>Powered by Google Gemini & Python Automation ❤️</small>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

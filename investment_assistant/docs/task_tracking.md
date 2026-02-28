@@ -26,10 +26,10 @@
 - [ ] 部署至雲端主機或 Serverless 平台 (目前於本地端測試)
 
 ## 階段四：Visual Dashboard (圖表化網頁 UI)
-- [ ] 建立前台網頁架構 (HTML/CSS/JS)
-- [ ] 撰寫資料匯出腳本：將 Python 爬到的報價與指標轉為 JSON 格式
-- [ ] 視覺化圖表開發
-  - [ ] 繪製 ETF 走勢圖、台股 EPS/本益比長條圖
-  - [ ] 繪製美國失業率與基準利率變化圖
-- [ ] 整合 GitHub Pages：設定 Actions 每日更新 JSON 並重新部署網頁
-- [ ] 與 Telegram Bot 串接：讓機器人在早報中附上專屬儀表板連結
+- [x] 建立前台網頁架構 (HTML/CSS/JS)
+- [x] 撰寫資料匯出腳本：將 Python 爬到的報價與指標轉為 JSON 格式
+- [x] 視覺化圖表開發
+  - [x] 繪製 ETF 走勢圖、台股 EPS/本益比長條圖
+  - [x] 繪製美國失業率與基準利率變化圖
+- [x] 整合 GitHub Pages：設定 Actions 每日更新 JSON 並重新部署網頁
+- [x] 與 Telegram Bot 串接：讓機器人在早報中附上專屬儀表板連結

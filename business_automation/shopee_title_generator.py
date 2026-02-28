@@ -1,11 +1,14 @@
 import os
-from openai import OpenAI
+import google.generativeai as genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# 初始化 OpenAI 客戶端
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+# 初始化 Gemini 客戶端
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+
+# 設定模型 (使用 gemini-2.5-flash 作為快速且便宜的文字處理預設值，若環境支援可替換對應模型)
+model = genai.GenerativeModel('gemini-2.5-flash')
 
 def generate_shopee_title(taobao_title: str, niche: str) -> str:
     """
@@ -26,16 +29,10 @@ def generate_shopee_title(taobao_title: str, niche: str) -> str:
     """
 
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": f"請改寫這個淘寶標題：\n{taobao_title}"}
-            ],
-            temperature=0.7,
-            max_tokens=100
+        response = model.generate_content(
+            f"{system_prompt}\n\n請改寫這個淘寶標題：\n{taobao_title}"
         )
-        return response.choices[0].message.content.strip()
+        return response.text.strip()
     except Exception as e:
         return f"發生錯誤: {e}"
 

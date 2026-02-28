@@ -33,3 +33,8 @@
   - [x] 繪製美國失業率與基準利率變化圖
 - [x] 整合 GitHub Pages：設定 Actions 每日更新 JSON 並重新部署網頁
 - [x] 與 Telegram Bot 串接：讓機器人在早報中附上專屬儀表板連結
+
+## 階段五：互動機器人 24hr 雲端部署 (未來展望)
+- [ ] 評估免伺服器 (Serverless) 方案 (如 Google Cloud Functions 或 Vercel)
+- [ ] 將 `interactive_bot.py` 改寫為 Webhook 模式以符合 Serverless 架構
+- [ ] 部署上線，實現免開機、24 小時隨時可對談的真・專屬理財幕僚

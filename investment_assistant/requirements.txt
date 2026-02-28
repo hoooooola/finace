@@ -1,0 +1,6 @@
+requests
+beautifulsoup4
+yfinance
+python-telegram-bot
+google-generativeai
+python-dotenv

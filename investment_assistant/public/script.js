@@ -20,24 +20,27 @@ function renderDashboard(data) {
     document.getElementById('updateTime').innerText = `更新時間: ${data.update_time}`;
     document.getElementById('aiAnalysisText').innerText = data.ai_analysis;
 
-    // 2. 渲染左側：美股 ETF 圖表 (長條圖)
-    const etfData = data.market_data.etfs.filter(e => !e.error);
-    const etfLabels = etfData.map(e => e.symbol);
-    const etfPrices = etfData.map(e => e.price);
+    // 2. 渲染左側：美股 ETF 圖表 (折線趨勢圖)
+    const etfData = data.market_data.etfs.filter(e => !e.error && e.history && e.history.length > 0);
+    const etfLabels = etfData.length > 0 ? etfData[0].history.map(h => h.date) : [];
+    const etfColors = ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 205, 86, 1)'];
+
+    const etfDatasets = etfData.map((e, index) => ({
+        label: e.symbol,
+        data: e.history.map(h => h.price),
+        borderColor: etfColors[index % etfColors.length],
+        backgroundColor: etfColors[index % etfColors.length].replace('1)', '0.1)'),
+        borderWidth: 2,
+        tension: 0.1,
+        fill: false
+    }));
 
     const ctxEtf = document.getElementById('etfChart').getContext('2d');
     new Chart(ctxEtf, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: etfLabels,
-            datasets: [{
-                label: '最新收盤價 (USD)',
-                data: etfPrices,
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1,
-                borderRadius: 4
-            }]
+            datasets: etfDatasets
         },
         options: {
             responsive: true,
@@ -52,63 +55,77 @@ function renderDashboard(data) {
         }
     });
 
-    // 3. 渲染右側：台股基本面 P/E (雷達圖)
-    // 我們過濾出有 PE 資料的台股來畫圖
-    const twStockData = data.market_data.tw_stocks.filter(s => !s.error && s.pe !== "N/A");
-    const twLabels = twStockData.map(s => `${s.symbol} ${s.name || ''}`.trim());
-    const twPE = twStockData.map(s => parseFloat(s.pe) || 0);
+    // 3. 渲染右側：台股股價趨勢 (折線圖)
+    const twStockData = data.market_data.tw_stocks.filter(s => !s.error && s.history && s.history.length > 0);
+    const twLabels = twStockData.length > 0 ? twStockData[0].history.map(h => h.date) : [];
+    const twColors = ['rgba(255, 159, 64, 1)', 'rgba(153, 102, 255, 1)', 'rgba(201, 203, 207, 1)'];
+
+    const twDatasets = twStockData.map((s, index) => ({
+        label: `${s.symbol} ${s.name || ''}`.trim(),
+        data: s.history.map(h => h.price),
+        borderColor: twColors[index % twColors.length],
+        backgroundColor: twColors[index % twColors.length].replace('1)', '0.1)'),
+        borderWidth: 2,
+        tension: 0.1,
+        fill: false
+    }));
 
     const ctxTw = document.getElementById('twStockChart').getContext('2d');
     new Chart(ctxTw, {
-        type: 'polarArea',  // 使用極座標圖展示本益比高低
+        type: 'line',
         data: {
             labels: twLabels,
-            datasets: [{
-                label: '本益比 (P/E)',
-                data: twPE,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(255, 205, 86, 0.6)'
-                ],
-                borderWidth: 1
-            }]
+            datasets: twDatasets
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'right', labels: { color: '#e5e7eb' } }
+                legend: { position: 'top', labels: { color: '#e5e7eb' } }
             },
             scales: {
-                r: {
-                    grid: { color: '#444' },
-                    ticks: { color: '#ccc', backdropColor: 'transparent' }
-                }
+                y: { beginAtZero: false, grid: { color: '#333' }, ticks: { color: '#aaa' } },
+                x: { grid: { color: '#333' }, ticks: { color: '#aaa' } }
             }
         }
     });
 
-    // 4. 渲染底部：總體經濟卡片
-    const macroContainer = document.getElementById('macroCards');
-    macroContainer.innerHTML = ''; // 清空預設
+    // 4. 渲染底部：總體經濟趨勢 (折線圖)
+    const macroData = data.market_data.macro_economy.filter(m => !m.error && m.history && m.history.length > 0);
+    // 假設雙方日期數量一樣多，取第一組當 X 軸
+    const macroLabels = macroData.length > 0 ? macroData[0].history.map(h => h.date) : [];
 
-    data.market_data.macro_economy.forEach(macro => {
-        if (macro.error) return;
+    const macroDatasets = macroData.map(m => {
+        const isUnrate = m.series_id === 'UNRATE';
+        const color = isUnrate ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)';
+        return {
+            label: `${m.name} (%)`,
+            data: m.history.map(h => h.value),
+            borderColor: color,
+            backgroundColor: color.replace('1)', '0.1)'),
+            borderWidth: 2,
+            tension: 0.1,
+            fill: true
+        };
+    });
 
-        // 判斷顏色：失業率若大於某數可能要標紅，這邊先用預設 highlight
-        let colorClass = macro.series_id === 'UNRATE' ? 'text-danger' : 'text-info';
-        let icon = macro.series_id === 'UNRATE' ? '📉' : '🏦';
-
-        const cardHtml = `
-            <div class="col-md-6 mb-3">
-                <div class="p-3 border border-secondary rounded bg-dark">
-                    <h5 class="text-light">${icon} ${macro.name} (${macro.series_id})</h5>
-                    <h2 class="mb-0 fw-bold ${colorClass}">${macro.value}</h2>
-                    <small class="text-muted">資料時間: ${macro.date}</small>
-                </div>
-            </div>
-        `;
-        macroContainer.innerHTML += cardHtml;
+    const ctxMacro = document.getElementById('macroChart').getContext('2d');
+    new Chart(ctxMacro, {
+        type: 'line',
+        data: {
+            labels: macroLabels,
+            datasets: macroDatasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top', labels: { color: '#e5e7eb' } }
+            },
+            scales: {
+                y: { beginAtZero: false, grid: { color: '#333' }, ticks: { color: '#aaa' } },
+                x: { grid: { color: '#333' }, ticks: { color: '#aaa' } }
+            }
+        }
     });
 }

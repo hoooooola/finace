@@ -35,6 +35,16 @@ def get_stock_basic_info(stock_id):
         pe = info.get('trailingPE', 'N/A')
         dividend_yield = info.get('dividendYield', 'N/A')
         
+        # 取得歷史股價
+        data = ticker.history(period="3mo")
+        history = []
+        if not data.empty:
+            for date, row in data.iterrows():
+                history.append({
+                    "date": date.strftime("%Y-%m-%d"),
+                    "price": round(row['Close'], 2)
+                })
+
         # 殖利率加上百分比號
         if isinstance(dividend_yield, (int, float)):
             dividend_yield = f"{round(dividend_yield, 2)}%"
@@ -45,6 +55,7 @@ def get_stock_basic_info(stock_id):
             "eps": eps,
             "pe": pe,
             "yield": dividend_yield,
+            "history": history,
             "name": info.get('longName', '')
         }
         return result

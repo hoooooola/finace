@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant" data-bs-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,18 +10,61 @@
     <!-- 引入 Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; }
-        .card { background-color: #1e1e1e; border: 1px solid #333; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        .card-header { border-bottom: 1px solid #333; font-weight: bold; color: #a1c4fd; }
-        h1 { color: #f8f9fa; font-weight: 700; margin-bottom: 0; }
-        .text-muted { color: #888 !important; }
-        .ai-analysis-box { background: linear-gradient(145deg, #1f2937, #111827); border-left: 4px solid #6366f1; padding: 20px; border-radius: 8px; }
-        .ai-text { font-size: 1.1rem; line-height: 1.6; color: #e5e7eb; white-space: pre-wrap; }
-        .chart-container { position: relative; height: 300px; width: 100%; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+        }
+
+        .card {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            border-bottom: 1px solid #333;
+            font-weight: bold;
+            color: #a1c4fd;
+        }
+
+        h1 {
+            color: #f8f9fa;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .text-muted {
+            color: #888 !important;
+        }
+
+        .ai-analysis-box {
+            background: linear-gradient(145deg, #1f2937, #111827);
+            border-left: 4px solid #6366f1;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .ai-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e5e7eb;
+            white-space: pre-wrap;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
         /* 避免圖表因 RWD 變形 */
-        canvas { max-width: 100%; }
+        canvas {
+            max-width: 100%;
+        }
     </style>
 </head>
+
 <body>
     <div class="container py-4">
         <!-- 頂部標題與更新時間 -->
@@ -50,7 +94,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        🇺🇸 美股重點 ETF 觀察 (股價)
+                        🇺🇸 美股重點 ETF 走勢 (近三個月)
                     </div>
                     <div class="card-body">
                         <div class="chart-container">
@@ -64,7 +108,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        🇹🇼 台股焦點大廠與 ETF (本益比 P/E)
+                        🇹🇼 台股焦點走勢 (近三個月)
                     </div>
                     <div class="card-body">
                         <div class="chart-container">
@@ -80,18 +124,18 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
-                        <span>🏛️ 美國聯準會總經風向標</span>
+                        <span>🏛️ 美國聯準會總經風向標 (近一年趨勢)</span>
                         <small class="text-warning">防禦型警戒指標</small>
                     </div>
                     <div class="card-body">
-                        <div class="row text-center" id="macroCards">
-                            <!-- JS 動態生成 -->
+                        <div class="chart-container" style="height: 350px;">
+                            <canvas id="macroChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <footer class="text-center text-muted mt-5 pb-3">
             <small>Powered by Google Gemini & Python Automation ❤️</small>
         </footer>
@@ -99,4 +143,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

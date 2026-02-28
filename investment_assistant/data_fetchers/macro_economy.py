@@ -23,7 +23,7 @@ def get_fred_data(series_id):
         "api_key": FRED_API_KEY,
         "file_type": "json",
         "sort_order": "desc",
-        "limit": 1  # 只取最新的一筆資料
+        "limit": 12  # 取最新的 12 筆資料
     }
     
     try:
@@ -33,10 +33,13 @@ def get_fred_data(series_id):
             observations = data.get("observations", [])
             if observations:
                 latest = observations[0]
+                history = [{"date": obs.get("date"), "value": float(obs.get("value", 0))} for obs in observations]
+                history.reverse() # 日期由舊到新排列供繪圖使用
                 return {
                     "series_id": series_id,
                     "date": latest.get("date"),
-                    "value": f"{latest.get('value')}%"
+                    "value": f"{latest.get('value')}%",
+                    "history": history
                 }
             else:
                 return {"series_id": series_id, "error": "回傳資料格式有誤"}

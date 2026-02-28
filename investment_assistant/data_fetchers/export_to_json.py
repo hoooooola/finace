@@ -15,10 +15,11 @@ import yfinance as yf
 def get_etf_data(ticker_symbol):
     try:
         ticker = yf.Ticker(ticker_symbol)
-        data = ticker.history(period="1d")
+        data = ticker.history(period="3mo")
         if not data.empty:
             closing_price = data['Close'].iloc[-1]
-            return {"symbol": ticker_symbol, "price": round(closing_price, 2)}
+            history = [{"date": d.strftime("%Y-%m-%d"), "price": round(r['Close'], 2)} for d, r in data.iterrows()]
+            return {"symbol": ticker_symbol, "price": round(closing_price, 2), "history": history}
         return {"symbol": ticker_symbol, "error": "No data"}
     except Exception as e:
         return {"symbol": ticker_symbol, "error": str(e)}

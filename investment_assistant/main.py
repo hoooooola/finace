@@ -112,7 +112,8 @@ def main():
             export_data_to_json(ai_text)
             
             # 推播訊息至 Telegram
-            dashboard_url = "https://hoooooola.github.io/finace"
+            # 注意：由於 GitHub Repository 已更名，這裡的 URL 也隨之更新
+            dashboard_url = "https://hoooooola.github.io/ardupilot_"
             final_message = f"📊 *今日投資早報*\n\n{market_data_summary}\n🤖 *理財幕僚分析*\n{ai_text}\n\n👉 [點此開啟您的專屬視覺化圖表儀表板]({dashboard_url})"
             send_telegram_message(final_message)
             
